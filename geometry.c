@@ -51,5 +51,5 @@ void Str()
 int main()
 {
     Str();
-    return 0;
+    return 1;
 }
