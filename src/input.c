@@ -1,71 +1,113 @@
 #include "input.h"
+#include "geometry.h"
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int punctcheckcr(char* a)
+int Input(Figure* new, char* A)
 {
-    int i;
-    int p = 0;
-    if (a[7] == '(') {
-        for (i = 8; i < sizeof(a); i++) {
-            if (a[sizeof(a) - 1] == ')') {
-                if (a[i] == ',')
-                    p = p + 1;
-            } else
-                printf("Wrong input format \n");
-        }
-        if (p > 2) {
-            printf("Wrong input format \n");
-            return 0;
-        }
-        // cooscheckcr(a);
-    } else {
-        printf("Wrong input format \n");
+    char B[256];
+    int i = 0;
+    while (A[i] >= 'a' && A[i] <= 'z') {
+        B[i] = A[i];
+        i++;
+    }
+    B[i] = '\0';
+    Coordinats(new, A);
+    if (!(strcmp(B, "circle"))) {
+        new->type = CIRCLE;
         return 0;
-    }
-    return 0;
-}
-
-/*int routetriangle(char* a)
-{
-    int i;
-    char* b = "riangle";
-    for (i = 1; i < 8; i++) {
-        if (strcmp(a[i], b[i - 1]) != 0) {
-            printf("Wrong input format\n");
-            return 0;
-        }
-        //    punctchecktr(a);
-    }
-}
-*/
-int routecircle(char* a)
-{
-    int i;
-    char* b = "ircle";
-    for (i = 1; i < 6; i++) {
-        if (a[i] == b[i - 1]) {
-            printf("Wrong input format\n");
-            return 0;
-        }
-        punctcheckcr(a);
-    }
-    return 0;
-}
-
-int FirstLetter(char* a)
-{
-    //  int f=0;
-    if (a[0] == 't' || a[0] == 'T') {
-        // f=1;
-        //  routetriangle(a);
+    } else {
+        printf("Unknown type\n");
         return 1;
     }
-    if (a[0] == 'c' || a[0] == 'C')
-        routecircle(a);
-    else
-        printf("Wrong input format\n");
-    return 1;
-    // else return 1;
+}
+
+int Coordinats(Figure* new, char* A)
+{
+    char* end;
+    end = A;
+    int i = -1;
+    while (*A) {
+        new->c[i] = strtod(A, &end);
+        A = end;
+        i++;
+        while (!(isdigit(*A) || *A == '-' || *A == '+') && *A) {
+            A++;
+        }
+    }
+    new->size = i;
+    return 0;
+}
+
+int Extra_symbol(char* arr, int i)
+{
+    for (int j = i; arr[j] != '\0'; j++) {
+        if (arr[j] > 'a' && arr[j] < 'z') {
+            printf("Extra symbol\n");
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int PunctuationC(char* arr, int i)
+{
+    int k = 0;
+    int j;
+    for (j = i; arr[j] != '\0'; j++) {
+        if (arr[j] == ',') {
+            k++;
+        }
+    }
+    if (k == 1) {
+        if (!(arr[j - 1] == ')')) {
+            printf("lacks ')'\n");
+            return 1;
+        }
+    } else {
+        printf("lacks or extra ','\n");
+        return 1;
+    }
+    return 0;
+}
+
+int Punctuation(char* arr)
+{
+    int done = 0;
+    for (int i = 0; arr[i] != '\0'; i++) {
+        if (arr[i] == '(') {
+            if (arr[i + 1] == '(') {
+                done = 1;
+                if (Extra_symbol(arr, (i + 1))) {
+                    return 1;
+                }
+                return 0;
+            } else {
+                done = 1;
+                if (Extra_symbol(arr, i) || PunctuationC(arr, i)) {
+                    return 1;
+                }
+                return 0;
+            }
+        }
+    }
+    if (done == 0) {
+        printf("Punctuation error (lacks '(')\n");
+        return 1;
+    }
+    return 0;
+}
+
+int First_Character(char* arr)
+{
+    if (arr[0] > 'a' && arr[0] < 'z') {
+        if (Punctuation(arr)) {
+            return 1;
+        }
+    } else {
+        printf("Error in the first character.\n");
+    }
+    return 0;
 }

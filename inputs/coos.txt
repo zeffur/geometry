@@ -1,0 +1,5 @@
+circle(8 9, 14)
+triangle(9 15, 20)
+cirvle(0 0, 45)
+circle(123, 45)
+circle(24, 234, 13)
