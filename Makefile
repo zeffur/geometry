@@ -3,6 +3,7 @@ BIN_DIR := ./bin
 BUILD_DIR := ./build
 SRC_DIR := ./src
 CC := gcc -Wall -Werror
+.PHONY: clean
 
 all: $(BIN_DIR)/main
 
