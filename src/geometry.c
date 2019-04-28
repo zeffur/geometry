@@ -38,17 +38,25 @@ void Print_Coordinats(Figure* new)
 
 void S_Circle(double* S, Figure* new)
 {
-    double r = new->c[2];
-    *S = M_PI * (r * r);
+    if (S && new) {
+        if (new->size == 3) {
+            double r = new->c[2];
+            *S = M_PI * (r * r);
+        }
+    }
 }
 
 void P_Circle(double* P, Figure* new)
 {
-    double r = new->c[2];
-    *P = 2 * M_PI * r;
+    if (P && new) {
+        if (new->size == 3) {
+            double r = new->c[2];
+            *P = 2 * M_PI * r;
+        }
+    }
 }
 
-void Vector(Figure* new, double* a, double* b, double* c)
+/*void Vector(Figure* new, double* a, double* b, double* c)
 {
     *a
             = sqrt(pow((new->c[2] - new->c[0]), 2.0)
@@ -61,7 +69,7 @@ void Vector(Figure* new, double* a, double* b, double* c)
                    + pow((new->c[1] - new->c[5]), 2.0));
 }
 
-/*void P_Triangle(double* P, double a, double b, double c)
+void P_Triangle(double* P, double a, double b, double c)
 {
     *P = a + b + c;
 }
